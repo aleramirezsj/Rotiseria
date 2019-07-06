@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -68,6 +69,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
@@ -76,6 +80,12 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -159,31 +169,65 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CategoriasController.cs" />
+    <Compile Include="Controllers\ComprasController.cs" />
+    <Compile Include="Controllers\DetalleComprasAPIController.cs" />
+    <Compile Include="Controllers\DetalleComprasController.cs" />
+    <Compile Include="Controllers\DetalleVentasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LlamarVistaController.cs" />
+    <Compile Include="Controllers\MVCLlamarVista.cs" />
+    <Compile Include="Controllers\ProductoesAPIController.cs" />
     <Compile Include="Controllers\ProductoesController.cs" />
     <Compile Include="Controllers\ProveedorsController.cs" />
     <Compile Include="Controllers\TipoUsuariosController.cs" />
     <Compile Include="Controllers\UsuariosController.cs" />
     <Compile Include="Controllers\VentasController.cs" />
+    <Compile Include="WebFormVentas.aspx.cs">
+      <DependentUpon>WebFormVentas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebFormVentas.aspx.designer.cs">
+      <DependentUpon>WebFormVentas.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="layout.Master.cs">
+      <DependentUpon>layout.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="layout.Master.designer.cs">
+      <DependentUpon>layout.Master</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Categoria.cs" />
+    <Compile Include="Models\Compra.cs" />
+    <Compile Include="Models\DetalleCompra.cs" />
+    <Compile Include="Models\DetalleVenta.cs" />
     <Compile Include="Models\Producto.cs" />
     <Compile Include="Models\Proveedor.cs" />
+    <Compile Include="Models\RenderActionViewModel.cs" />
     <Compile Include="Models\RotiseriaContext.cs" />
     <Compile Include="Models\TipoUsuario.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Venta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WebFormVentas22.aspx.cs">
+      <DependentUpon>WebFormVentas22.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebFormVentas22.aspx.designer.cs">
+      <DependentUpon>WebFormVentas22.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="WebFormVentas.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
@@ -191,7 +235,10 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="WebFormVentas22.aspx" />
+    <Content Include="layout.Master" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\codigo.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -202,7 +249,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -231,11 +280,6 @@
     <Content Include="Views\Usuarios\Details.cshtml" />
     <Content Include="Views\Usuarios\Edit.cshtml" />
     <Content Include="Views\Usuarios\Index.cshtml" />
-    <Content Include="Views\Productoes\Create.cshtml" />
-    <Content Include="Views\Productoes\Delete.cshtml" />
-    <Content Include="Views\Productoes\Details.cshtml" />
-    <Content Include="Views\Productoes\Edit.cshtml" />
-    <Content Include="Views\Productoes\Index.cshtml" />
     <Content Include="Views\Proveedors\Create.cshtml" />
     <Content Include="Views\Proveedors\Delete.cshtml" />
     <Content Include="Views\Proveedors\Details.cshtml" />
@@ -246,9 +290,31 @@
     <Content Include="Views\Ventas\Details.cshtml" />
     <Content Include="Views\Ventas\Edit.cshtml" />
     <Content Include="Views\Ventas\Index.cshtml" />
+    <Content Include="Views\DetalleVentas\Create.cshtml" />
+    <Content Include="Views\DetalleVentas\Delete.cshtml" />
+    <Content Include="Views\DetalleVentas\Details.cshtml" />
+    <Content Include="Views\DetalleVentas\Edit.cshtml" />
+    <Content Include="Views\DetalleVentas\Index.cshtml" />
+    <Content Include="Views\Productoes\Create.cshtml" />
+    <Content Include="Views\Productoes\Delete.cshtml" />
+    <Content Include="Views\Productoes\Details.cshtml" />
+    <Content Include="Views\Productoes\Edit.cshtml" />
+    <Content Include="Views\Productoes\Index.cshtml" />
+    <Content Include="Views\Compras\Create.cshtml" />
+    <Content Include="Views\Compras\Delete.cshtml" />
+    <Content Include="Views\Compras\Details.cshtml" />
+    <Content Include="Views\Compras\Edit.cshtml" />
+    <Content Include="Views\Compras\Index.cshtml" />
+    <Content Include="Views\DetalleCompras\Create.cshtml" />
+    <Content Include="Views\DetalleCompras\Delete.cshtml" />
+    <Content Include="Views\DetalleCompras\Details.cshtml" />
+    <Content Include="Views\DetalleCompras\Edit.cshtml" />
+    <Content Include="Views\DetalleCompras\Index.cshtml" />
+    <Content Include="Views\LlamarVista\PartialRender.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="img\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

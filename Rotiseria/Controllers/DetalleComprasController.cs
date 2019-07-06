@@ -10,113 +10,116 @@ using Rotiseria.Models;
 
 namespace Rotiseria.Controllers
 {
-    public class VentasController : Controller
+    public class DetalleComprasController : Controller
     {
         private RotiseriaContext db = new RotiseriaContext();
 
-        // GET: Ventas
+        // GET: DetalleCompras
         public ActionResult Index()
         {
-            var ventas = db.Ventas.Include(v => v.Usuario);
-            return View(ventas.ToList());
+            var detalleCompras = db.DetalleCompras.Include(d => d.Compra).Include(d => d.Producto);
+            return View(detalleCompras.ToList());
         }
 
-        // GET: Ventas/Details/5
+        // GET: DetalleCompras/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            DetalleCompra detalleCompra = db.DetalleCompras.Find(id);
+            if (detalleCompra == null)
             {
                 return HttpNotFound();
             }
-            return View(venta);
+            return View(detalleCompra);
         }
 
-        // GET: Ventas/Create
+        // GET: DetalleCompras/Create
         public ActionResult Create()
         {
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User");
-            var NuevaVenta = new Venta { SubTotal = 0, Fecha = DateTime.Today };
-            return View(NuevaVenta);
+            ViewBag.CompraId = new SelectList(db.Compras, "Id", "Id");
+            ViewBag.ProductoId = new SelectList(db.Productoes, "Id", "Nombre");
+            return View();
         }
 
-        // POST: Ventas/Create
+        // POST: DetalleCompras/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UsuarioId,Fecha,SubTotal")] Venta venta)
+        public ActionResult Create([Bind(Include = "Id,CompraId,ProductoId,PrecioCompra,Cantidad,Total")] DetalleCompra detalleCompra)
         {
             if (ModelState.IsValid)
             {
-                db.Ventas.Add(venta);
+                db.DetalleCompras.Add(detalleCompra);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.CompraId = new SelectList(db.Compras, "Id", "Id", detalleCompra.CompraId);
+            ViewBag.ProductoId = new SelectList(db.Productoes, "Id", "Nombre", detalleCompra.ProductoId);
+            return View(detalleCompra);
         }
 
-        // GET: Ventas/Edit/5
+        // GET: DetalleCompras/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            DetalleCompra detalleCompra = db.DetalleCompras.Find(id);
+            if (detalleCompra == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.CompraId = new SelectList(db.Compras, "Id", "Id", detalleCompra.CompraId);
+            ViewBag.ProductoId = new SelectList(db.Productoes, "Id", "Nombre", detalleCompra.ProductoId);
+            return View(detalleCompra);
         }
 
-        // POST: Ventas/Edit/5
+        // POST: DetalleCompras/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UsuarioId,Fecha,SubTotal")] Venta venta)
+        public ActionResult Edit([Bind(Include = "Id,CompraId,ProductoId,PrecioCompra,Cantidad,Total")] DetalleCompra detalleCompra)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(venta).State = EntityState.Modified;
+                db.Entry(detalleCompra).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.CompraId = new SelectList(db.Compras, "Id", "Id", detalleCompra.CompraId);
+            ViewBag.ProductoId = new SelectList(db.Productoes, "Id", "Nombre", detalleCompra.ProductoId);
+            return View(detalleCompra);
         }
 
-        // GET: Ventas/Delete/5
+        // GET: DetalleCompras/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            DetalleCompra detalleCompra = db.DetalleCompras.Find(id);
+            if (detalleCompra == null)
             {
                 return HttpNotFound();
             }
-            return View(venta);
+            return View(detalleCompra);
         }
 
-        // POST: Ventas/Delete/5
+        // POST: DetalleCompras/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Venta venta = db.Ventas.Find(id);
-            db.Ventas.Remove(venta);
+            DetalleCompra detalleCompra = db.DetalleCompras.Find(id);
+            db.DetalleCompras.Remove(detalleCompra);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

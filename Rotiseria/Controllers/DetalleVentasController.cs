@@ -10,113 +10,116 @@ using Rotiseria.Models;
 
 namespace Rotiseria.Controllers
 {
-    public class VentasController : Controller
+    public class DetalleVentasController : Controller
     {
         private RotiseriaContext db = new RotiseriaContext();
 
-        // GET: Ventas
+        // GET: DetalleVentas
         public ActionResult Index()
         {
-            var ventas = db.Ventas.Include(v => v.Usuario);
-            return View(ventas.ToList());
+            var detalleVentas = db.DetalleVentas.Include(d => d.Producto).Include(d => d.Venta);
+            return View(detalleVentas.ToList());
         }
 
-        // GET: Ventas/Details/5
+        // GET: DetalleVentas/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            DetalleVenta detalleVenta = db.DetalleVentas.Find(id);
+            if (detalleVenta == null)
             {
                 return HttpNotFound();
             }
-            return View(venta);
+            return View(detalleVenta);
         }
 
-        // GET: Ventas/Create
+        // GET: DetalleVentas/Create
         public ActionResult Create()
         {
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User");
-            var NuevaVenta = new Venta { SubTotal = 0, Fecha = DateTime.Today };
-            return View(NuevaVenta);
+            ViewBag.ProductoId = new SelectList(db.Productoes, "Id", "Nombre");
+            ViewBag.VentaId = new SelectList(db.Ventas, "Id", "Id");
+            return View();
         }
 
-        // POST: Ventas/Create
+        // POST: DetalleVentas/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UsuarioId,Fecha,SubTotal")] Venta venta)
+        public ActionResult Create([Bind(Include = "Id,VentaId,ProductoId,PrecioVenta,Cantidad,Total")] DetalleVenta detalleVenta)
         {
             if (ModelState.IsValid)
             {
-                db.Ventas.Add(venta);
+                db.DetalleVentas.Add(detalleVenta);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.ProductoId = new SelectList(db.Productoes, "Id", "Nombre", detalleVenta.ProductoId);
+            ViewBag.VentaId = new SelectList(db.Ventas, "Id", "Id", detalleVenta.VentaId);
+            return View(detalleVenta);
         }
 
-        // GET: Ventas/Edit/5
+        // GET: DetalleVentas/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            DetalleVenta detalleVenta = db.DetalleVentas.Find(id);
+            if (detalleVenta == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.ProductoId = new SelectList(db.Productoes, "Id", "Nombre", detalleVenta.ProductoId);
+            ViewBag.VentaId = new SelectList(db.Ventas, "Id", "Id", detalleVenta.VentaId);
+            return View(detalleVenta);
         }
 
-        // POST: Ventas/Edit/5
+        // POST: DetalleVentas/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UsuarioId,Fecha,SubTotal")] Venta venta)
+        public ActionResult Edit([Bind(Include = "Id,VentaId,ProductoId,PrecioVenta,Cantidad,Total")] DetalleVenta detalleVenta)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(venta).State = EntityState.Modified;
+                db.Entry(detalleVenta).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.ProductoId = new SelectList(db.Productoes, "Id", "Nombre", detalleVenta.ProductoId);
+            ViewBag.VentaId = new SelectList(db.Ventas, "Id", "Id", detalleVenta.VentaId);
+            return View(detalleVenta);
         }
 
-        // GET: Ventas/Delete/5
+        // GET: DetalleVentas/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            DetalleVenta detalleVenta = db.DetalleVentas.Find(id);
+            if (detalleVenta == null)
             {
                 return HttpNotFound();
             }
-            return View(venta);
+            return View(detalleVenta);
         }
 
-        // POST: Ventas/Delete/5
+        // POST: DetalleVentas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Venta venta = db.Ventas.Find(id);
-            db.Ventas.Remove(venta);
+            DetalleVenta detalleVenta = db.DetalleVentas.Find(id);
+            db.DetalleVentas.Remove(detalleVenta);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

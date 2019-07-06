@@ -10,113 +10,116 @@ using Rotiseria.Models;
 
 namespace Rotiseria.Controllers
 {
-    public class VentasController : Controller
+    public class ComprasController : Controller
     {
         private RotiseriaContext db = new RotiseriaContext();
 
-        // GET: Ventas
+        // GET: Compras
         public ActionResult Index()
         {
-            var ventas = db.Ventas.Include(v => v.Usuario);
-            return View(ventas.ToList());
+            var compras = db.Compras.Include(c => c.Proveedor).Include(c => c.Usuario);
+            return View(compras.ToList());
         }
 
-        // GET: Ventas/Details/5
+        // GET: Compras/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            Compra compra = db.Compras.Find(id);
+            if (compra == null)
             {
                 return HttpNotFound();
             }
-            return View(venta);
+            return View(compra);
         }
 
-        // GET: Ventas/Create
+        // GET: Compras/Create
         public ActionResult Create()
         {
+            ViewBag.ProveedorId = new SelectList(db.Proveedors, "Id", "RazonSocial");
             ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User");
-            var NuevaVenta = new Venta { SubTotal = 0, Fecha = DateTime.Today };
-            return View(NuevaVenta);
+            return View();
         }
 
-        // POST: Ventas/Create
+        // POST: Compras/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,UsuarioId,Fecha,SubTotal")] Venta venta)
+        public ActionResult Create([Bind(Include = "Id,UsuarioId,ProveedorId,Fecha,Iva,Subtotal,Total")] Compra compra)
         {
             if (ModelState.IsValid)
             {
-                db.Ventas.Add(venta);
+                db.Compras.Add(compra);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.ProveedorId = new SelectList(db.Proveedors, "Id", "RazonSocial", compra.ProveedorId);
+            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", compra.UsuarioId);
+            return View(compra);
         }
 
-        // GET: Ventas/Edit/5
+        // GET: Compras/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            Compra compra = db.Compras.Find(id);
+            if (compra == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.ProveedorId = new SelectList(db.Proveedors, "Id", "RazonSocial", compra.ProveedorId);
+            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", compra.UsuarioId);
+            return View(compra);
         }
 
-        // POST: Ventas/Edit/5
+        // POST: Compras/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,UsuarioId,Fecha,SubTotal")] Venta venta)
+        public ActionResult Edit([Bind(Include = "Id,UsuarioId,ProveedorId,Fecha,Iva,Subtotal,Total")] Compra compra)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(venta).State = EntityState.Modified;
+                db.Entry(compra).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", venta.UsuarioId);
-            return View(venta);
+            ViewBag.ProveedorId = new SelectList(db.Proveedors, "Id", "RazonSocial", compra.ProveedorId);
+            ViewBag.UsuarioId = new SelectList(db.Usuarios, "Id", "User", compra.UsuarioId);
+            return View(compra);
         }
 
-        // GET: Ventas/Delete/5
+        // GET: Compras/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Venta venta = db.Ventas.Find(id);
-            if (venta == null)
+            Compra compra = db.Compras.Find(id);
+            if (compra == null)
             {
                 return HttpNotFound();
             }
-            return View(venta);
+            return View(compra);
         }
 
-        // POST: Ventas/Delete/5
+        // POST: Compras/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Venta venta = db.Ventas.Find(id);
-            db.Ventas.Remove(venta);
+            Compra compra = db.Compras.Find(id);
+            db.Compras.Remove(compra);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

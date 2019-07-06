@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rotiseria.Migrations;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -7,9 +8,13 @@ using System.Web;
 namespace Rotiseria.Models
 {
     public class RotiseriaContext: DbContext
-
     {
-        public RotiseriaContext() : base(“RotiseriaContext”) { }
+        public RotiseriaContext() : base("RotiseriaContext") {
+            Database.SetInitializer<RotiseriaContext>(
+              new MigrateDatabaseToLatestVersion<RotiseriaContext, Configuration>());
+        }
+
+
 
         public DbSet<Categoria> Categorias { get; set; }
 
@@ -22,5 +27,11 @@ namespace Rotiseria.Models
         public System.Data.Entity.DbSet<Rotiseria.Models.Proveedor> Proveedors { get; set; }
 
         public System.Data.Entity.DbSet<Rotiseria.Models.Venta> Ventas { get; set; }
+
+        public System.Data.Entity.DbSet<Rotiseria.Models.DetalleVenta> DetalleVentas { get; set; }
+
+        public System.Data.Entity.DbSet<Rotiseria.Models.Compra> Compras { get; set; }
+
+        public System.Data.Entity.DbSet<Rotiseria.Models.DetalleCompra> DetalleCompras { get; set; }
     }
 }

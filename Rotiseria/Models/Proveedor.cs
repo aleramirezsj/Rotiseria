@@ -10,6 +10,7 @@ namespace Rotiseria.Models
     {
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Proveedor")]
         public String RazonSocial { get; set; }
         public String Direccion { get; set; }
         public String Celular { get; set; }

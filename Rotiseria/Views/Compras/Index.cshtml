@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Rotiseria.Models.Producto>
+﻿@model IEnumerable<Rotiseria.Models.Compra>
 
 @{
     ViewBag.Title = "Index";
@@ -12,22 +12,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.CategoriaProducto.Nombre)
+            @Html.DisplayNameFor(model => model.Proveedor.RazonSocial)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Nombre)
+            @Html.DisplayNameFor(model => model.Usuario.User)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Cantidad)
+            @Html.DisplayNameFor(model => model.Fecha)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PrecioCosto)
+            @Html.DisplayNameFor(model => model.Iva)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.PrecioVenta)
+            @Html.DisplayNameFor(model => model.Subtotal)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Imagen)
+            @Html.DisplayNameFor(model => model.Total)
         </th>
         <th></th>
     </tr>
@@ -35,22 +35,22 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.CategoriaProducto.Nombre)
+            @Html.DisplayFor(modelItem => item.Proveedor.RazonSocial)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Nombre)
+            @Html.DisplayFor(modelItem => item.Usuario.User)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Cantidad)
+            @Html.DisplayFor(modelItem => item.Fecha)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PrecioCosto)
+            @Html.DisplayFor(modelItem => item.Iva)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PrecioVenta)
+            @Html.DisplayFor(modelItem => item.Subtotal)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Imagen)
+            @Html.DisplayFor(modelItem => item.Total)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

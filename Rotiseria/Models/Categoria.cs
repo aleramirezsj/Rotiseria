@@ -10,6 +10,7 @@ namespace Rotiseria.Models
     {
         public int Id { get; set; }
         [Required]
+        [Display(Name = "Categoría")]
         public String Nombre { get; set; }
     }
 }

@@ -48,7 +48,7 @@ namespace Rotiseria.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Cantidad,PrecioCosto,PrecioVenta,Imagen,CategoriaProductoId")] Producto producto)
+        public ActionResult Create([Bind(Include = "Id,Nombre,Cantidad,PrecioCosto,PrecioVenta,Imagen,CategoriaProductoId")] Producto producto)
         {
             if (ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace Rotiseria.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Cantidad,PrecioCosto,PrecioVenta,Imagen,CategoriaProductoId")] Producto producto)
+        public ActionResult Edit([Bind(Include = "Id,Nombre,Cantidad,PrecioCosto,PrecioVenta,Imagen,CategoriaProductoId")] Producto producto)
         {
             if (ModelState.IsValid)
             {
